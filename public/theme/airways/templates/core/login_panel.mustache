@@ -1,0 +1,14 @@
+{{!
+    Los Angeles Airways welcome panel.
+}}
+<div class="login-layout-left-content text-center">
+    <img class="airways-login-logo" src="{{output.get_logo_url}}" alt="Los Angeles Airways">
+    <h1 class="h2 mb-3">Los Angeles Airways</h1>
+    {{#leftinstructions}}
+        <div class="mx-auto text-start">{{{leftinstructions}}}</div>
+    {{/leftinstructions}}
+    {{^leftinstructions}}
+        <p class="lead mb-2">Welcome aboard.</p>
+        <p class="mb-0">Your learning journey starts here.</p>
+    {{/leftinstructions}}
+</div>

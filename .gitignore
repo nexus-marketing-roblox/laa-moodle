@@ -1,0 +1,12 @@
+# Local Moodle installation settings contain database credentials.
+/config.php
+
+# User uploads and local database exports must stay out of source control.
+/moodledata/
+*.sql
+*.sql.gz
+*.mbz
+
+# Local environment secrets.
+/.env
+/.env.*

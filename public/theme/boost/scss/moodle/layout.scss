@@ -1,0 +1,306 @@
+.layout {
+    &.fullscreen {
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: $zindex-modal-backdrop;
+        @include transition(0.5s);
+        width: 100vw;
+        margin: 0;
+        opacity: 1;
+        background-color: $modal-content-bg;
+
+        > div {
+            height: 100%;
+            width: 100%;
+        }
+
+        .loading-icon {
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            display: inline-block;
+            width: 100%;
+            top: 40%;
+            position: fixed;
+            .icon {
+                max-width: 4em;
+                max-height: 4em;
+                font-size: 4em;
+            }
+        }
+    }
+}
+
+#page.drawers {
+    margin-top: $navbar-height;
+    @include thin-scrolls($gray-100);
+    .main-inner {
+        max-width: 100%;
+        width: 100%;
+        margin: 0 auto;
+        background-color: var(--#{$prefix}body-bg);
+        @include border-radius();
+        padding: 1.5rem 0.5rem;
+        margin-top: 0.5rem;
+        margin-bottom: 3rem;
+        flex: 1 0 auto;
+    }
+    .activity-header {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .pagelayout-standard,
+    body.limitedwidth {
+        #page.drawers {
+            .main-inner {
+                max-width: $course-content-maxwidth;
+            }
+            .footer-popover {
+                max-width: $course-content-maxwidth;
+                width: 100%;
+                margin: 0 auto;
+                @include border-radius();
+            }
+        }
+    }
+    .header-maxwidth {
+        max-width: $course-content-maxwidth;
+        margin: 0 auto;
+        padding-left: 15px;
+        padding-right: 15px;
+
+        .header-inner {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+
+    // On full-width layouts, the page heading spans the main region, so it aligns with the
+    // secondary navigation and the page content below it.
+    body:not(.pagelayout-standard):not(.limitedwidth) .main-inner > .header-maxwidth {
+        max-width: none;
+    }
+}
+
+.drawer-toggles {
+
+    .drawer-toggler {
+        position: fixed;
+        top: calc(#{$navbar-height} + 1rem);
+        z-index: 2;
+        .btn {
+            margin: auto $drawer-toggler-margin;
+            background-color: var(--#{$prefix}gray-200);
+            width: $icon-medium-width;
+            height: $icon-medium-width; // Using the same value for width and height to make the button square.
+            &:focus {
+                box-shadow: $input-btn-focus-box-shadow;
+            }
+            &:hover {
+                background-color: var(--#{$prefix}gray-400);
+            }
+        }
+    }
+
+    .drawer-left-toggle {
+        left: 0;
+    }
+
+    .drawer-right-toggle {
+        right: 0;
+    }
+}
+
+#page.drawers.show-drawer-left .drawer-left-toggle {
+    display: none;
+}
+
+#page.drawers.show-drawer-right .drawer-right-toggle {
+    display: none;
+}
+
+@include media-breakpoint-down(md) {
+    .drawer-toggler .btn {
+        box-shadow: 0 2px 8px 0 rgba($black, .33);
+    }
+
+    .drawer-toggles {
+        z-index: 100;
+
+        .drawer-right-toggle,
+        .drawer-left-toggle {
+            top: calc(99vh - (#{$navbar-height} * 2.5));
+        }
+    }
+    #page.drawers.scroll-down {
+        .drawer-right-toggle {
+            transform: translateX(150%);
+            pointer-events: auto;
+            visibility: hidden;
+        }
+        .drawer-left-toggle {
+            transform: translateX(-150%);
+            pointer-events: auto;
+            visibility: hidden;
+        }
+    }
+    .hasstickyfooter:has(.drawer-right-toggle) .maintenancewarning {
+        right: 2rem;
+    }
+    .hasstickyfooter:has(.drawer-left-toggle) .maintenancewarning {
+        margin-left: 3.5rem;
+    }
+}
+
+@include media-breakpoint-up(sm) {
+    #page.drawers .main-inner {
+        margin-top: 1.5rem;
+    }
+}
+
+@include media-breakpoint-up(md) {
+
+    // Add some padding for the drawer toggle buttons
+    #page.drawers {
+        padding-left: 3rem;
+        padding-right: 3rem;
+        .main-inner {
+            padding: 1.5rem 0.5rem;
+        }
+        div[role="main"] {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .drawer-left,
+    .drawer-right {
+        top: $navbar-height;
+        height: calc(100vh - #{$navbar-height});
+    }
+    .hasstickyfooter {
+        .drawer-left,
+        .drawer-right {
+            top: $navbar-height;
+        }
+    }
+
+    #page.drawers {
+        position: relative;
+        overflow-y: visible;
+        @include transition(0.2s);
+        left: 0;
+        right: 0;
+
+        // The toggle of an open drawer is hidden, so the gutter reserved for it is not needed.
+        &.show-drawer-left {
+            margin-left: $drawer-left-width;
+            margin-right: 0;
+            padding-left: 0;
+        }
+
+        &.show-drawer-right {
+            margin-left: 0;
+            margin-right: $drawer-right-width;
+            padding-right: 0;
+        }
+
+        &.show-drawer-left.show-drawer-right {
+            margin-left: $drawer-left-width;
+            margin-right: $drawer-right-width;
+        }
+
+        &.hasstickyfooter {
+            margin-bottom: var(--sticky-footer-total-height, #{$stickyfooter-height});
+        }
+    }
+
+    // Shift floating footer buttons when the right drawer opens at the browser edge.
+    // Excluded for pagelayout-standard/limitedwidth where the drawer is anchored to
+    // .main-inner and does not overlap the footer button area.
+    body:not(.pagelayout-standard):not(.limitedwidth) {
+        #page.drawers.show-drawer-right .popover-process-monitor,
+        #page.drawers.show-drawer-right .btn-footer-popover,
+        #page.drawers.show-drawer-right .btn-footer-communication {
+            right: calc(#{$drawer-right-width} + 2rem);
+        }
+
+        &:has(#page.drawers.show-drawer-right) .maintenancewarning {
+            right: calc(#{$drawer-right-width} + 5rem);
+        }
+    }
+
+    // Toggle buttons anchored to the main region edges, matching the drawer anchor formulas.
+    .pagelayout-standard,
+    body.limitedwidth {
+        // Lines up the top of the rounded content card with the anchored side drawers.
+        #page.drawers .main-inner {
+            margin-top: calc(#{$drawer-anchored-top-offset} - #{$navbar-height});
+        }
+
+        // Room for each open drawer and its gaps, which the drawers are anchored from (see drawer.scss).
+        // A closed drawer side keeps room for its toggle button.
+        #page.drawers {
+            padding-left: $drawer-toggle-reserve;
+            padding-right: $drawer-toggle-reserve;
+
+            &.show-drawer-left {
+                margin-left: $drawer-left-reserve;
+                padding-left: 0;
+            }
+
+            &.show-drawer-right {
+                margin-right: $drawer-right-reserve;
+                padding-right: 0;
+            }
+        }
+
+        .drawer-toggles {
+            // Keep the open togglers of closed drawers aligned with the drawers.
+            .drawer-toggler {
+                top: $drawer-anchored-toggler-top;
+            }
+
+            // Min() keeps the toggle button the screen-edge gap away when there isn't enough room to anchor to main-inner.
+            .drawer-left-toggle {
+                left: auto;
+                right: Min(#{$drawer-anchor-none}, #{$drawer-toggle-edge-anchor});
+                @include transition(right 0.2s ease);
+            }
+
+            .drawer-right-toggle {
+                right: auto;
+                left: Min(#{$drawer-anchor-none}, #{$drawer-toggle-edge-anchor});
+                @include transition(left 0.2s ease);
+            }
+        }
+
+        // The toggle of an open drawer is hidden, so only the toggle of the closed drawer needs to track the content.
+        // It takes the place of the closed drawer, with the same gaps.
+        &:has(#page.drawers.show-drawer-right):not(:has(#page.drawers.show-drawer-left)) {
+            .drawer-toggles .drawer-left-toggle {
+                right: drawer-left-anchor($drawer-toggle-reserve, $drawer-right-reserve, $drawer-toggler-margin);
+            }
+        }
+
+        &:has(#page.drawers.show-drawer-left):not(:has(#page.drawers.show-drawer-right)) {
+            .drawer-toggles .drawer-right-toggle {
+                left: drawer-right-anchor($drawer-left-reserve, $drawer-toggle-reserve, $drawer-toggler-margin);
+            }
+        }
+    }
+}
+
+.drawercontrolbuttons {
+    margin-top: 92px;
+    .buttons {
+        z-index: 1;
+    }
+}

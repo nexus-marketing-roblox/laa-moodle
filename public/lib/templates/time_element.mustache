@@ -1,0 +1,52 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template core/time_element
+
+    Template to display an HTML time element.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * data-timestamp Number - The timestamp for the element.
+    * data-datetimeformat String - A valid format for the datetime attribute.
+
+    Context variables required for this template:
+    * timestamp Number - The timestamp for the element.
+    * userdateformat String - The user-facing date format
+    * datetime String - Optional value for the datetime attribute. If empty, it is formatted from timestamp.
+    * datetimeformat String - A valid format for the datetime attribute. Defaults to the ISO-8601 format of '%Y-%m-%dT%H:%M%z'.
+    Example context (json):
+    {
+        "timestamp": 0,
+        "userdateformat": "%d %b %Y",
+        "datetimeformat": "%Y-%m-%dT%H:%M%z"
+    }
+}}
+<time id="time-{{$elementid}}{{uniqid}}{{/elementid}}" class="{{$elementclass}}{{timeclass}}{{/elementclass}}"
+      datetime="{{#htmldatetime}}
+          {{$datetimeval}}{{datetime}}{{/datetimeval}},
+          {{$timestampval}}{{timestamp}}{{/timestampval}},
+          {{$datetimeformatval}}{{#datetimeformat}}{{.}}{{/datetimeformat}}{{^datetimeformat}}%Y-%m-%dT%H:%M%z{{/datetimeformat}}{{/datetimeformatval}}
+      {{/htmldatetime}}"
+      data-timestamp="{{$timestampval}}{{timestamp}}{{/timestampval}}"
+      data-datetimeformat="{{$datetimeformatval}}{{#datetimeformat}}{{.}}{{/datetimeformat}}{{^datetimeformat}}%Y-%m-%dT%H:%M%z{{/datetimeformat}}{{/datetimeformatval}}">
+    {{$datedisplay}}
+        {{#userdate}} {{$timestampval}}{{timestamp}}{{/timestampval}}, {{$userdateformatval}}{{userdateformat}}{{/userdateformatval}} {{/userdate}}
+    {{/datedisplay}}
+</time>
